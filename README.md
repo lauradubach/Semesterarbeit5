@@ -21,10 +21,10 @@ Dieser Proof of Concept zeigt, wie eine Azure-Umgebung nach **Zero Trust Prinzip
 
 | Ziel | Messkriterium |
 |------|--------------|
-| 🔐 Zero Trust | Kein Service Principal mit statischem Secret im gesamten PoC |
-| 🏷️ FinOps Tagging | 100% Tag-Compliance gemäss Azure Policy Compliance Report |
-| 💰 Kostentransparenz | Alle Kosten sind vollständig einem Team zuordenbar |
-| 🏗️ Infrastructure as Code | Komplettes Setup mit einem einzigen Befehl deploybar |
+| Zero Trust | Kein Service Principal mit statischem Secret im gesamten PoC |
+| FinOps Tagging | 100% Tag-Compliance gemäss Azure Policy Compliance Report |
+| Kostentransparenz | Alle Kosten sind vollständig einem Team zuordenbar |
+| Infrastructure as Code | Komplettes Setup mit einem einzigen Befehl deploybar |
 
 ---
 
