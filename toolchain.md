@@ -9,6 +9,7 @@ Installationsdatum und Verwendungszweck gemäss US-03.
 | Azure CLI | 2.86.0 | 27.05.2026 | Azure Ressourcenverwaltung, az login |
 | Terraform CLI | v1.15.4 | 27.05.2026 | Infrastructure as Code |
 | Git | 2.53.0.windows.1 | 27.05.2026 | Versionskontrolle |
+| Python | 3.12.10 | 27.05.2026 | Skript-Runtime (falls genutzt) |
 
 ## VS Code Extensions
 
