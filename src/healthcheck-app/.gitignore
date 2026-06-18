@@ -54,3 +54,4 @@ AzuriteConfig
 __pycache__/
 .python_packages/
 local.settings.json
+.venv/
