@@ -13,6 +13,12 @@ AUDIENCE = os.environ.get("AAD_AUDIENCE", "api://func-zerotrust-finops-poc")
 JWKS_URL = f"https://login.microsoftonline.com/{TENANT_ID}/discovery/v2.0/keys"
 
 
+VALID_ISSUERS = [
+    f"https://login.microsoftonline.com/{TENANT_ID}/v2.0",
+    f"https://sts.windows.net/{TENANT_ID}/",
+]
+
+
 def validate_token(auth_header: str):
     if not auth_header or not auth_header.startswith("Bearer "):
         return False, {"error": "missing_or_malformed_bearer_token"}
@@ -26,8 +32,10 @@ def validate_token(auth_header: str):
             signing_key.key,
             algorithms=["RS256"],
             audience=AUDIENCE,
-            issuer=f"https://login.microsoftonline.com/{TENANT_ID}/v2.0",
+            options={"verify_iss": False},
         )
+        if payload.get("iss") not in VALID_ISSUERS:
+            return False, {"error": "invalid_issuer"}
         return True, payload
     except jwt.PyJWTError as e:
         return False, {"error": str(e)}
