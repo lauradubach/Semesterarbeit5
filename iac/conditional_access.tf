@@ -58,7 +58,7 @@ resource "azuread_conditional_access_policy" "cap03_block_legacy_auth" {
 # damit der Portal-Zugriff im Fehlerfall immer erhalten bleibt
 resource "azuread_conditional_access_policy" "cap02_device_compliance" {
   display_name = "CAP-02 Gerätecompliance (PoC)"
-  state         = "enabled"
+  state         = "enabledForReportingButNotEnforced"
 
   conditions {
     client_app_types = ["all"]
