@@ -1,0 +1,24 @@
+name: Tag Compliance Check
+
+on:
+  push:
+    paths:
+      - "iac/**.tf"
+  pull_request:
+    paths:
+      - "iac/**.tf"
+
+jobs:
+  check-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Tag Compliance Check
+        run: python scripts/check_tags.py
