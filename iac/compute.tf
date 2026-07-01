@@ -1,11 +1,9 @@
-# Resource Group – existiert bereits in Azure, wird hier unter Terraform-Verwaltung gebracht
 resource "azurerm_resource_group" "main" {
   name     = "rg-zerotrust-finops-poc"
   location = "switzerlandnorth"
-  tags     = var.tags
+  tags     = local.governance_tags
 }
 
-# Storage Account – wird vom Function-App-Runtime benötigt (Trigger-Verwaltung, Logs)
 resource "azurerm_storage_account" "func" {
   name                     = "stzerotrustfinopspoc"
   resource_group_name      = azurerm_resource_group.main.name
@@ -13,20 +11,18 @@ resource "azurerm_storage_account" "func" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   min_tls_version          = "TLS1_2"
-  tags                     = var.tags
+  tags                     = local.identity_tags
 }
 
-# App Service Plan – Consumption (Y1), serverlos und im Studenten-Guthaben praktisch kostenlos
 resource "azurerm_service_plan" "func" {
   name                = "asp-zerotrust-finops-poc"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   os_type             = "Linux"
   sku_name            = "Y1"
-  tags                = var.tags
+  tags                = local.identity_tags
 }
 
-# Function App mit System-Assigned Managed Identity (Zero Trust: keine statischen Credentials)
 resource "azurerm_linux_function_app" "main" {
   name                        = "func-zerotrust-finops-poc"
   resource_group_name         = azurerm_resource_group.main.name
@@ -50,7 +46,7 @@ resource "azurerm_linux_function_app" "main" {
     type = "SystemAssigned"
   }
 
-  tags = var.tags
+  tags = local.identity_tags
 }
 
 output "function_app_principal_id" {

@@ -1,9 +1,13 @@
 variable "tags" {
-  description = "Pflicht-Tags für alle Azure-Ressourcen"
+  description = "Gemeinsame Pflicht-Tags (environment, workload) für alle Azure-Ressourcen. Der team-Tag wird pro Ressource über locals ergänzt."
   type        = map(string)
   default = {
-    team        = "cloud-engineering"
-    environment = "dev"
-    workload    = "zero-trust-poc"
+    environment = "poc"
+    workload    = "zerotrust-finops-poc"
   }
+}
+
+locals {
+  identity_tags    = merge(var.tags, { team = "identity-poc" })
+  governance_tags  = merge(var.tags, { team = "governance-poc" })
 }

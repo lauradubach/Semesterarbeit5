@@ -10,7 +10,7 @@ resource "azurerm_key_vault" "main" {
   enable_rbac_authorization  = true
   purge_protection_enabled   = true
   soft_delete_retention_days = 90
-  tags                       = var.tags
+  tags                       = local.governance_tags   # ← geändert
 }
 
 # Wichtig: Bei RBAC-Autorisierung bekommst du als Deployer KEINEN automatischen Zugriff
@@ -44,7 +44,7 @@ resource "azurerm_log_analytics_workspace" "main" {
   location            = azurerm_resource_group.main.location
   sku                 = "PerGB2018"
   retention_in_days   = 30
-  tags                = var.tags
+  tags                = local.governance_tags   # ← geändert
 }
 
 resource "azurerm_monitor_diagnostic_setting" "kv_diag" {
