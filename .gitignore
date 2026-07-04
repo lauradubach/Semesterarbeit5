@@ -1,7 +1,23 @@
 # Terraform
-.terraform/
-.terraform.lock.hcl
+**/.terraform/*
 *.tfstate
-*.tfstate.backup
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Terraform Variablen-Dateien mit sensiblen Werten (falls ihr sowas anlegt)
 *.tfvars
-terraform.tfplan
+*.tfvars.json
+
+# Terraform CLI Konfiguration
+.terraformrc
+terraform.rc
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# VS Code
+.vscode/
