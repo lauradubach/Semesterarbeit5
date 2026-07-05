@@ -28,6 +28,27 @@ Dieser Proof of Concept zeigt, wie eine Azure-Umgebung nach **Zero Trust Prinzip
 
 ---
 
+## Bekannte Plattform-Einschränkungen
+
+Diese PoC-Subscription läuft unter dem Offer-Typ „Microsoft Azure Sponsorship"
+(`MS-AZR-0036P`). Dabei wurden zwei von Microsoft dokumentierte Einschränkungen
+festgestellt:
+
+- **Azure Cost Management** (Budgets, Cost Analysis, Kostenaufschlüsselung nach
+  Betrag) wird für diesen Offer-Typ nicht unterstützt. Die Terraform-Ressourcen
+  für Budget-Alerts sind vollständig implementiert (`iac/budgets.tf`), aber
+  standardmässig über `enable_budgets = false` deaktiviert. Als Ersatznachweis
+  für den E-Mail-Benachrichtigungskanal dient eine Azure Monitor Action Group.
+- Das alternative **Sponsorship-Verbrauchsportal** ist nur für den
+  Subscription-Owner-Account zugänglich, nicht für zugewiesene Benutzer im
+  Demo-Tenant-Setup. Als Ersatz für das Cost-Dashboard wurde ein
+  Azure-Portal-Dashboard mit Resource-Graph-Kacheln (Ressourcenverteilung nach
+  `team`/`workload`-Tag) erstellt.
+
+Details und Screenshots dazu siehe Semesterarbeit, Kapitel US-14/US-15.
+
+---
+
 ## Architektur
 
 ```
@@ -50,6 +71,7 @@ Alle Ressourcen tragen die Pflicht-Tags `team`, `environment` und `workload`.
 ├── iac/          # Terraform-Skripte (Provider, Resources, Variables)
 ├── docs/         # Architekturdiagramm, Konzeptdokumente
 ├── src/          # Applikationscode (Azure Functions / Container)
+├── scripts/      # Hilfsskripte (u.a. Tag-Compliance-Check)
 ├── README.md
 └── toolchain.md  # Versionen aller eingesetzten Tools
 ```
@@ -68,11 +90,33 @@ terraform apply
 ```
 
 Alle Variablen befinden sich in `iac/terraform.tfvars` — keine Hardcoded-Werte.
+Eine Vorlage ohne echte Werte liegt unter `iac/terraform.tfvars.example`.
+
+### Tag-Compliance-Check (lokal)
 
 ```bash
-# Umgebung vollständig aufräumen
+python scripts/check_tags.py
+```
+
+Prüft, ob alle taggbaren Terraform-Ressourcen die Pflicht-Tags besitzen. Läuft
+zusätzlich automatisch bei jedem Push via GitHub Actions
+(`.github/workflows/tag-compliance.yml`).
+
+### Umgebung aufräumen
+
+```bash
 terraform destroy
 ```
+
+⚠️ **Wichtiger Hinweis:** Der Key Vault (`kv-zerotrust-finops-poc`) ist mit
+`purge_protection_enabled = true` konfiguriert (Zero-Trust-Best-Practice gegen
+versehentliches/böswilliges Löschen). Ein `destroy` entfernt ihn zwar
+(Soft-Delete), der Name bleibt jedoch für `soft_delete_retention_days` (90 Tage)
+reserviert und kann in dieser Zeit **nicht** neu angelegt werden. Ein
+vollständiger Destroy-Test wurde im Rahmen dieser Arbeit deshalb bewusst nicht
+live durchgeführt, um die PoC-Umgebung nicht zu gefährden — stattdessen wurde
+das Verhalten mit `terraform plan -destroy` simuliert und dokumentiert
+(siehe Semesterarbeit, Kapitel US-16).
 
 ---
 
@@ -109,6 +153,6 @@ terraform destroy
 
 ## Autorin
 
-**Laura Dubach**  
-GitHub: [@lauradubach](https://github.com/lauradubach)  
+**Laura Dubach**
+GitHub: [@lauradubach](https://github.com/lauradubach)
 E-Mail: laura.dubach@edu.tbz.ch
