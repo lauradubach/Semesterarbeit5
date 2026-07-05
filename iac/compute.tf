@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "main" {
   name     = "rg-zerotrust-finops-poc"
-  location = "switzerlandnorth"
+  location = var.location
   tags     = local.governance_tags
 }
 
@@ -32,8 +32,8 @@ resource "azurerm_linux_function_app" "main" {
   storage_account_access_key  = azurerm_storage_account.func.primary_access_key
 
   app_settings = {
-    AAD_TENANT_ID = "54bca567-3b11-42be-a7aa-ca09f256cbcc"
-    AAD_AUDIENCE  = "api://ba455719-b15a-45d9-83c0-81b98af15722"
+    AAD_TENANT_ID = var.aad_tenant_id
+    AAD_AUDIENCE  = var.aad_audience
   }
 
   site_config {

@@ -7,15 +7,15 @@ locals {
 }
 
 resource "azurerm_consumption_budget_subscription" "team_budget" {
-  for_each        = toset(local.budget_teams)
+  for_each        = var.enable_budgets ? toset(local.budget_teams) : toset([])
   name            = "budget-${each.value}"
   subscription_id = data.azurerm_subscription.current.id
-  amount          = 5
+  amount          = var.budget_amount
   time_grain      = "Monthly"
 
   time_period {
-    start_date = "2026-07-01T00:00:00Z"
-    end_date   = "2027-07-01T00:00:00Z"
+    start_date = var.budget_start_date
+    end_date   = var.budget_end_date
   }
 
   filter {
@@ -50,15 +50,15 @@ output "budget_names" {
 
 # US-14 (Ersatznachweis): Action Group für Budget-/Cost-Alerts.
 # Azure Cost Management Budgets werden auf "Microsoft Azure Sponsorship"-
-# Subscriptions (Offer MS-AZR-0036P, u.a. Azure for Students) nicht unterstützt
-# (dokumentierte Microsoft-Einschränkung, kein Konfigurationsfehler).
+# Subscriptions (Offer MS-AZR-0036P, u.a. Azure for Students) nicht
+# unterstützt (dokumentierte Microsoft-Einschränkung, kein Konfigurationsfehler).
 # Diese Action Group dient als Nachweis, dass der E-Mail-Benachrichtigungskanal
 # technisch funktioniert und bei einer unterstützten Subscription (Pay-As-You-Go,
 # EA, MCA) direkt in den Budgets oben (contact_groups) wiederverwendet werden könnte.
 resource "azurerm_monitor_action_group" "budget_alerts" {
   name                = "ag-budget-alerts-poc"
   resource_group_name = azurerm_resource_group.main.name
-  short_name          = "budgetpoc" # max. 12 Zeichen
+  short_name          = "budgetpoc"
 
   email_receiver {
     name          = "laura-dubach"

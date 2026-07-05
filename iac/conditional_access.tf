@@ -77,8 +77,8 @@ resource "azuread_conditional_access_policy" "cap02_device_compliance" {
     }
   }
 
-  grant_controls {
-    operator           = "AND"
-    built_in_controls  = ["compliantDevice"]
-  }
+grant_controls {
+  operator          = "OR"
+  built_in_controls = ["compliantDevice"]
+}
 }

@@ -1,0 +1,2 @@
+aad_tenant_id = "<your-entra-id-tenant-id>"
+aad_audience  = "api://<your-app-registration-uri>"

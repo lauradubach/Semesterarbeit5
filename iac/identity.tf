@@ -41,10 +41,10 @@ resource "azurerm_key_vault_secret" "demo_secret" {
 resource "azurerm_log_analytics_workspace" "main" {
   name                = "law-zerotrust-finops-poc"
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  location            = var.location
   sku                 = "PerGB2018"
   retention_in_days   = 30
-  tags                = local.governance_tags   # ← geändert
+  tags                = local.governance_tags
 }
 
 resource "azurerm_monitor_diagnostic_setting" "kv_diag" {
