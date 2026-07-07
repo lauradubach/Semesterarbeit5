@@ -15,6 +15,8 @@ EXCLUDED_TYPES = {
     "azurerm_monitor_diagnostic_setting",
     "azurerm_key_vault_key",
     "azurerm_key_vault_certificate",
+    "azurerm_consumption_budget_subscription",   # Budgets unterstützen keine Tags (Provider-Doku)
+    "azurerm_subscription_policy_assignment",    # Policy Assignments unterstützen keine Tags (Provider-Doku)
 }
 # Ganze Provider, deren Ressourcen keine Azure-Tags kennen (Entra ID)
 EXCLUDED_PREFIXES = ("azuread_", "data ")
